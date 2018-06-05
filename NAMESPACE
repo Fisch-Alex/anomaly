@@ -1,0 +1,7 @@
+useDynLib(anomaly)
+importFrom("graphics", "abline", "plot", "points")
+importFrom("stats", "mad", "median", "var")
+export(anomaly_series)
+S3method(print, anomaly_series)
+S3method(summary, anomaly_series)
+S3method(plot, anomaly_series)
