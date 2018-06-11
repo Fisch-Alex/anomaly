@@ -1,11 +1,12 @@
 Package: anomaly
 Type: Package
 Title: Detecting Anomalies in Data
-Version: 0.0.0
-Date: 2018-04-27
+Version: 0.0.1
+Date: 2018-06-11
 Author: Alex Fisch <a.t.fisch@lancaster.ac.uk> 
 Maintainer: Dan Grose <dan.grose@lancaster.ac.uk>
-Description: An implementation of CAPA (Collective And Point Anomaly) for the detection of anomalies in time series data. 
+Description: An implementation of CAPA (Collective And Point Anomaly) for the detection of anomalies in time series data. The package also contains Kepler lightcurev data and shows how CAPA can be applied to detect exoplanets.
 License: GPL
+Imports: dplyr
 NeedsCompilation: yes
 RoxygenNote: 6.0.1

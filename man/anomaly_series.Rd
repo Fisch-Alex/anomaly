@@ -22,7 +22,7 @@ anomaly_series(x, penaltywindow = NULL, penaltyanomaly = NULL,
 An anomaly_series object.
 }
 \description{
-CAPA (Collective And Point Anomaly) by A. Fisch, I. A. Eckley, and P. N. Fearnhead assumes that the data has a certain mean and variance for most
+CAPA (Collective And Point Anomaly) by A. T. M. Fisch, I. A. Eckley, and P. N. Fearnhead assumes that the data has a certain mean and variance for most
 timepoints and detects segments in which the mean and/or variance deviates from the typical mean and variance as collective anomalies. It also detects point
 outliers and returns a measure of strength for the changes in mean and variance. At best, if the number of anomalous windows scales linearly with the number of
 data points, CAPA scales linearly with the number of data points. At worst, if there are no anomalies at all, CAPA scales quadratically with the number of data points.
@@ -42,7 +42,19 @@ plot(inferred_anomalies)
 summary(inferred_anomalies)
 print(inferred_anomalies)
 
+### Real data example: 
+
+library(anomaly)
+data(Lightcurves)
+### Plot the data for Kepler 10965588: No transit apparent
+plot(Kepler10965588$Day,Kepler10965588$Brightness,xlab = "Day",pch=".")
+### Examine a period of 62.9 days for Kepler 10965588
+binned_data = period_average(Kepler10965588,62.9)
+inferred_anomalies = anomaly_series(binned_data)
+plot(inferred_anomalies,xlab="Bin")
+# We found a planet! 
+
 }
 \references{
-Fisch, A., Eckley, I. A. & Fearnhead, P. N. (2018) A linear time method for the detection of point and collective anomalies.
+Fisch, A. T. M., Eckley, I. A. & Fearnhead, P. N. (2018) A linear time method for the detection of point and collective anomalies.
 }

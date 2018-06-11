@@ -26,5 +26,4 @@ x[3201:3500] = rnorm(300,0,10)
 x[c(1000,2000,3000,4000)] = rnorm(4,0,100)
 inferred_anomalies = anomaly_series(x)
 summary(inferred_anomalies)
-
 }
