@@ -1,37 +1,4 @@
 
-#' A technique for detecting anomalous segments based on CAPA (Collective And Point Anomaly) by Fisch et al.
-#'
-#' CAPA (Collective And Point Anomaly) by A. Fisch, I. A. Eckley, and P. N. Fearnhead assumes that the data has a certain mean and variance for most
-#' timepoints and detects segments in which the mean and/or variance deviates from the typical mean and variance as collective anomalies. It also detects point
-#' outliers and returns a measure of strength for the changes in mean and variance. At best, if the number of anomalous windows scales linearly with the number of
-#' data points, CAPA scales linearly with the number of data points. At worst, if there are no anomalies at all, CAPA scales quadratically with the number of data points. 
-#'
-#' @param x A numeric vector containing the data which is to be inspected.
-#' @param penaltywindow A numeric constant indicating the penalty for adding an additional epidemic changepoint. It defaults to a BIC style penalty if no argument is provided.
-#' @param penaltyanomaly A numeric constant indicating the penalty for adding an additional point anomaly. It defaults to a BIC style penalty if no argument is provided.
-#' @param minimumsegmentlength An integer indicating the minimum length of epidemic changes. It must be at least 2 and defaults to 10.
-#' @param warnings A logical determining whether the warnings should be displayed. It defaults to TRUE.
-#' 
-#' @return An anomaly_series object. 
-#'
-#' @examples
-#' library(anomaly)
-#' set.seed(2018)
-#' # Generate data typically followig a normal distribution with mean 0 and variance 1. 
-#' # Then introduce 3 anomaly windows and 4 point outliers.
-#' x  = rnorm(5000)
-#' x[401:500]   = rnorm(100,4,1)
-#' x[1601:1800] = rnorm(200,0,0.01)
-#' x[3201:3500] = rnorm(300,0,10)
-#' x[c(1000,2000,3000,4000)] = rnorm(4,0,100)
-#' inferred_anomalies = anomaly_series(x)
-#' plot(inferred_anomalies)
-#' summary(inferred_anomalies)
-#' print(inferred_anomalies)
-#'
-#' @references Fisch, A., Eckley, I. A. & Fearnhead, P. N. (2018) A linear time method for the detection of point and collective anomalies.
-#'
-#' @export
 anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimumsegmentlength = 10, warnings = TRUE){
    
   ##### We do our preprocessing here

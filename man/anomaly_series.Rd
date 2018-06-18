@@ -24,13 +24,14 @@ An anomaly_series object.
 \description{
 CAPA (Collective And Point Anomaly) by A. T. M. Fisch, I. A. Eckley, and P. N. Fearnhead assumes that the data has a certain mean and variance for most
 timepoints and detects segments in which the mean and/or variance deviates from the typical mean and variance as collective anomalies. It also detects point
-outliers and returns a measure of strength for the changes in mean and variance. At best, if the number of anomalous windows scales linearly with the number of
-data points, CAPA scales linearly with the number of data points. At worst, if there are no anomalies at all, CAPA scales quadratically with the number of data points.
+outliers and returns a measure of strength for the changes in mean and variance. If the number of anomalous windows scales linearly with the number of
+data points, CAPA scales linearly with the number of data points. At
+worst, if there are no anomalies at all, the computational cost of CAPA scales quadratically with the number of data points.
 }
 \examples{
 library(anomaly)
 set.seed(2018)
-# Generate data typically followig a normal distribution with mean 0 and variance 1. 
+# Generate data typically following a normal distribution with mean 0 and variance 1. 
 # Then introduce 3 anomaly windows and 4 point outliers.
 x  = rnorm(5000)
 x[401:500]   = rnorm(100,4,1)
@@ -56,5 +57,7 @@ plot(inferred_anomalies,xlab="Bin")
 
 }
 \references{
-Fisch, A. T. M., Eckley, I. A. & Fearnhead, P. N. (2018) A linear time method for the detection of point and collective anomalies.
+  \insertRef{2018arXiv180601947F}{anomaly}
 }
+
+

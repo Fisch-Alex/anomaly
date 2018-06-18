@@ -21,7 +21,7 @@ Plot method for anomaly_series objects as returned by the \code{\link{anomaly_se
 \examples{
 library(anomaly)
 set.seed(2018)
-# Generate data typically followig a normal distribution with mean 0 and variance 1. 
+# Generate data typically following a normal distribution with mean 0 and variance 1. 
 # Then introduce 3 anomaly windows and 4 point outliers.
 x  = rnorm(5000)
 x[401:500]   = rnorm(100,4,1)

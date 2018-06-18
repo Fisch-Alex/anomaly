@@ -14,7 +14,8 @@ period_average(data,period)
 A vector of numerics
 }
 \description{
-The signal of transitting planets is very weak, especially if the planet is small. This function amplifies it by amplifying the periodicity of the signal. All observations times are taken modulo the period and then binned. An average is then taken within each bin. This is then returned. If the period (or an integer fraction of a period) is used then a transit signal should be visible. 
+
+The signal of transiting planets is very weak, especially if the planet is small. This function amplifies it by exploiting the periodicity of the signal. All observations times are taken modulo the period and then binned. An average is then taken within each bin, those averages then stored as a vector and returned. If the orbital period of an exoplanet (or an integer fraction thereof) is used as argument for "period", the signal to noise ratio of the transit is improved, which can allow for the planet's detection.
 }
 \examples{
 library(anomaly)

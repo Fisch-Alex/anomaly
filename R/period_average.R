@@ -1,10 +1,12 @@
 period_average = function(data,period){
-  
-  period = tryCatch({as.numeric(period)},
+    
+
+period = tryCatch({as.numeric(period)},
                                   error   = function(e){stop("period has to be a positive numeric")},
                                   warning = function(w){stop("period has to be a positive numeric")})
-  
-  if (length(period)>1){
+
+
+if (length(period)>1){
     warning("The input for period has multiple entries. Only the first one is kept")
     period = period[1]
   }
@@ -28,8 +30,9 @@ period_average = function(data,period){
   data = tryCatch({as.data.frame(data)},
                     error   = function(e){stop("data has to be a data frame or something which can be converted into one")},
                     warning = function(e){stop("data has to be a data frame or something which can be converted into one")})
-  
-  given_names = colnames(data)
+
+
+given_names = colnames(data)
   
   if (!("Day" %in% given_names)){
     stop("Column Day is missing in data")
@@ -82,9 +85,10 @@ period_average = function(data,period){
   }  
   
   if(nrow(data)<3){
-    error("data has fewer than 3 rows.")
+    stop("data has fewer than 3 rows.")
   }
 
+    
   times = data$Day
   obs   = data$Brightness
   
@@ -97,11 +101,10 @@ period_average = function(data,period){
   
   tmp = data.frame(index = indices, observation = obs)
   
-  planets <- group_by(tmp, index)
-  delay2 <- summarize(planets, avg = mean(observation, na.rm = T))
+  planets <- group_by(tmp, .data$index)
+  delay2 <- summarize(planets, avg = mean(.data$observation, na.rm = T))
   
   observationsavg = delay2$avg
   
   return(observationsavg)
-  
 }
