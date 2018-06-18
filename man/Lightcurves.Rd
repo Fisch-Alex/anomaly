@@ -27,7 +27,7 @@ This research has made use of the NASA Exoplanet Archive, which is operated by t
 data(Lightcurves)
 }
 \format{
-Seven data frames called Kepler1871056, Kepler2307415, Kepler3102384, Kepler3231341, Kepler3447722, Kepler4139816, Kepler10965588. Each of them consists of two columns called "Brightness" and "Day", containing measurements of a star's brightness and the measurement's timestamp respectively.
+A list of seven dataframes named "Kepler1871056", "Kepler2307415", "Kepler3102384", "Kepler3231341", "Kepler3447722", "Kepler4139816", and "Kepler10965588". Each dataframe consists of two columns called "Brightness" and "Day", containing measurements of a star's brightness and the measurement's timestamp respectively.
 }
 
 \keyword{datasets}

@@ -48,9 +48,9 @@ print(inferred_anomalies)
 library(anomaly)
 data(Lightcurves)
 ### Plot the data for Kepler 10965588: No transit apparent
-plot(Kepler10965588$Day,Kepler10965588$Brightness,xlab = "Day",pch=".")
+plot(Lightcurves$Kepler10965588$Day,Lightcurves$Kepler10965588$Brightness,xlab = "Day",pch=".")
 ### Examine a period of 62.9 days for Kepler 10965588
-binned_data = period_average(Kepler10965588,62.9)
+binned_data = period_average(Lightcurves$Kepler10965588,62.9)
 inferred_anomalies = anomaly_series(binned_data)
 plot(inferred_anomalies,xlab="Bin")
 # We found a planet! 
