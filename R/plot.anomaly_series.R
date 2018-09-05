@@ -8,11 +8,31 @@ plot.anomaly_series = function(x,xlab="",ylab="",...){
   if(length(unexpectedarguments)==1){warning(paste("The argument",unexpectedarguments,"has been ignored"))}
   if(length(unexpectedarguments)>1){warning(paste("The arguments",paste(unexpectedarguments,", "),"have been ignored"))}  
   
-  plot(anomaly_object[["x"]],ylab=ylab,xlab=xlab)
+  tmpdaf = data.frame(x = 1:length(anomaly_object[["x"]]),y = anomaly_object[["x"]])
   
-  points(anomaly_object[["pointanomalies"]],anomaly_object[["x"]][anomaly_object[["pointanomalies"]]],col="red")
+  output = ggplot(tmpdaf,aes(x,y))
   
-  abline(v = anomaly_object[["anomalywindows"]][,"start"],col="red")
-  abline(v = anomaly_object[["anomalywindows"]][, "end" ],col="red")
+  if (length(anomaly_object[["pointanomalies"]])>0.5){
+    pointanomalydaf = data.frame(x=anomaly_object[["pointanomalies"]],y=anomaly_object[["x"]][anomaly_object[["pointanomalies"]]])
+    output = output + geom_point(data = pointanomalydaf,aes(x=x,y=y), colour="red", size=2)
+  }
+  
+  if (nrow(anomaly_object[["anomalywindows"]])>0){
+    collectiveanomalydaf = anomaly_object[["anomalywindows"]]
+    collectiveanomalydaf$ymax =  Inf
+    collectiveanomalydaf$ymin = -Inf
+    output = output + geom_rect(data = collectiveanomalydaf,inherit.aes = F,mapping = aes(xmin=start,xmax=end,ymin=ymin,ymax=ymax),fill="red",alpha=0.25)
+  }
+  
+  output = output+geom_path()+ labs(x=xlab,y=ylab)
+  
+  return(output)
+  
+  #plot(anomaly_object[["x"]],ylab=ylab,xlab=xlab)
+
+  #points(anomaly_object[["pointanomalies"]],anomaly_object[["x"]][anomaly_object[["pointanomalies"]]],col="red")
+  
+  #abline(v = anomaly_object[["anomalywindows"]][,"start"],col="red")
+  #abline(v = anomaly_object[["anomalywindows"]][, "end" ],col="red")
   
 }
