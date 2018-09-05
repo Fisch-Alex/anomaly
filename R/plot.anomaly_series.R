@@ -21,10 +21,10 @@ plot.anomaly_series = function(x,xlab="",ylab="",...){
     collectiveanomalydaf = anomaly_object[["anomalywindows"]]
     collectiveanomalydaf$ymax =  Inf
     collectiveanomalydaf$ymin = -Inf
-    output = output + geom_rect(data = collectiveanomalydaf,inherit.aes = F,mapping = aes_string(xmin="start",xmax="end",ymin="ymin",ymax="ymax"),fill="red",alpha=0.25)
+    output = output + geom_rect(data = collectiveanomalydaf,inherit.aes = F,mapping = aes_string(xmin="start",xmax="end",ymin="ymin",ymax="ymax"),fill="red",alpha=0.5)
   }
   
-  output = output+geom_path()+ labs(x=xlab,y=ylab)
+  output = output+geom_point()+ labs(x=xlab,y=ylab)
   
   return(output)
   
