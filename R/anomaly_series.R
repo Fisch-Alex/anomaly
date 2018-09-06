@@ -1,5 +1,4 @@
-
-anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimumsegmentlength = 10, warnings = TRUE){
+anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimumsegmentlength = 10, warnings = TRUE, type = "meanvar"){
    
   ##### We do our preprocessing here
   
@@ -150,7 +149,12 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   x = x - median(x)
   x = x/mad(x)
   
+  if (type == "meanvar"){
   Canomalyoutput = .Call("MeanVarAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), penaltywindow, penaltyanomaly)
+  }
+  if (type == "mean"){
+    Canomalyoutput = .Call("MeanAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), penaltywindow, penaltyanomaly)
+  }  
   
   if(is.null(Canomalyoutput)){
     warning("User interrupt. NULL is returned.")
