@@ -1,4 +1,3 @@
-
 plot.anomaly_series = function(x,xlab="",ylab="",...){
   
   anomaly_object = x
@@ -27,12 +26,5 @@ plot.anomaly_series = function(x,xlab="",ylab="",...){
   output = output+geom_point()+ labs(x=xlab,y=ylab)
   
   return(output)
-  
-  #plot(anomaly_object[["x"]],ylab=ylab,xlab=xlab)
-
-  #points(anomaly_object[["pointanomalies"]],anomaly_object[["x"]][anomaly_object[["pointanomalies"]]],col="red")
-  
-  #abline(v = anomaly_object[["anomalywindows"]][,"start"],col="red")
-  #abline(v = anomaly_object[["anomalywindows"]][, "end" ],col="red")
   
 }
