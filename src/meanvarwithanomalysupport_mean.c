@@ -17,7 +17,7 @@ void populateorderedobservationlist_mean(struct orderedobservationlist_mean **li
 
 	int ii = 0;
 
-	*list = (struct orderedobservationlist*) calloc( n+2 , sizeof( struct orderedobservationlist ) );
+	*list = (struct orderedobservationlist_mean*) calloc( n+2 , sizeof( struct orderedobservationlist_mean ) );
 	
 	(*list)[0].numberofobservation = 0;
 	(*list)[0].observation = 0;
@@ -31,7 +31,7 @@ void populateorderedobservationlist_mean(struct orderedobservationlist_mean **li
 	(*list)[0].option = -99;
 
 	(*list)[0].destruction = n+100;
-	(*list)[0].next = (orderedobservationlist*)&((*list)[1]);
+	(*list)[0].next = (orderedobservationlist_mean*)&((*list)[1]);
 	(*list)[0].previous = NULL;
 
 	for (ii = 1; ii < n+1; ii++)
@@ -87,7 +87,7 @@ void updatewithobservation_mean(int ii, struct orderedobservationlist_mean *list
 		factor  = (ii - current->numberofobservation + 1);
 		current->cumulativesum = current->cumulativesum + (x - current->cumulativesum)/factor;
 
-		saving = current->cumulativesum * current->cumulativesum * factor
+		saving = current->cumulativesum * current->cumulativesum * factor;
 
 		current->segmentcost = current->optimalcostofprevious - saving + penaltychange;
 		current = current->next;
@@ -106,7 +106,7 @@ void findoptimaloption_mean(int ii, struct orderedobservationlist_mean *list, in
 	bestcut= &(list[ii-1]);
 	option = 0;
 
-	squareestimate  = list[ii].observation * list[ii].observation
+	squareestimate  = list[ii].observation * list[ii].observation;
 
 	scoreanomalous = list[ii].optimalcostofprevious - squareestimate + penaltyoutlier;
 	

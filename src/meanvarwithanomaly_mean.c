@@ -33,7 +33,7 @@ SEXP MeanAnomaly(SEXP Rx, SEXP Rn, SEXP Rminlength, SEXP Rbetachange, SEXP Rbeta
   	betachange       = *REAL(Rbetachange);
   	betaanomaly      = *REAL(Rbetaanomaly);
 
-	struct orderedobservationlist* mylist;
+	struct orderedobservationlist_mean* mylist;
 
 	populateorderedobservationlist_mean(&mylist, x, n); 
 

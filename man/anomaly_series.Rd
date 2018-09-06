@@ -5,7 +5,7 @@
 \title{A technique for detecting anomalous segments based on CAPA (Collective And Point Anomaly) by Fisch et al.}
 \usage{
 anomaly_series(x, penaltywindow = NULL, penaltyanomaly = NULL,
-  minimumsegmentlength = 10, warnings = TRUE)
+  minimumsegmentlength = 10, warnings = TRUE, method = "meanvar")
 }
 \arguments{
 \item{x}{A numeric vector containing the data which is to be inspected.}
@@ -17,6 +17,8 @@ anomaly_series(x, penaltywindow = NULL, penaltyanomaly = NULL,
 \item{minimumsegmentlength}{An integer indicating the minimum length of epidemic changes. It must be at least 2 and defaults to 10.}
 
 \item{warnings}{A logical determining whether the warnings should be displayed. It defaults to TRUE.}
+
+\item{method}{A string indicating which type of deviations from the baseline are considered. Can be "meanvar" for collective anomalies caracterised by joint changes in mean and variance (the default) and "mean" for collective anomalies characterised by changes in mean only.}
 }
 \value{
 An anomaly_series object.

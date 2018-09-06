@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-bool check_user_interrupt()
+bool check_user_interrupt();
 
 typedef struct orderedobservationlist 
 {
@@ -42,12 +42,12 @@ typedef struct orderedobservationlist_mean
 	double segmentcost;
 	
 	double optimalcost;
-	struct orderedobservationlist* optimalcut;
+	struct orderedobservationlist_mean* optimalcut;
 	int option;
 
 	int    destruction;
-  	struct orderedobservationlist* next;
-  	struct orderedobservationlist* previous;
+  	struct orderedobservationlist_mean* next;
+  	struct orderedobservationlist_mean* previous;
 } orderedobservationlist_mean;
 
 void populateorderedobservationlist_mean(struct orderedobservationlist_mean **list, double* x , int n);
