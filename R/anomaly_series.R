@@ -1,6 +1,8 @@
 anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimumsegmentlength = 10, warnings = TRUE, method = "meanvar"){
    
-  ##### We do our preprocessing here
+  ##### We do our error handling here
+  
+  # ADD: Error traps for method
   
   if(!is.logical(warnings)){
     stop("warnings must be a logical.")
@@ -79,7 +81,8 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   
   Defaultwindowpenalty = function(){
     if(warnings){warning("Non-numeric argument for penaltywindow. Default penalty used.")}
-    penaltywindow = 4*log(length(x))
+    if (method == "meanvar"){penaltywindow = 4*log(length(x))}
+    if (method == "mean"){penaltywindow = 3*log(length(x))}
   }
   
   Defaultanomalypenalty = function(){
@@ -92,17 +95,20 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   
   if(is.na(penaltywindow)){
     if(warnings){warning("penaltywindow is NA. Default penalty used.")}
-    penaltywindow = 4*log(length(x))
+    if (method == "meanvar"){penaltywindow = 4*log(length(x))}
+    if (method == "mean"){penaltywindow = 3*log(length(x))}
   }
   
   if(is.nan(penaltywindow)){
     if(warnings){warning("penaltywindow is NaN. Default penalty used.")}
-    penaltywindow = 4*log(length(x))
+    if (method == "meanvar"){penaltywindow = 4*log(length(x))}
+    if (method == "mean"){penaltywindow = 3*log(length(x))}
   }
   
   if(is.infinite(penaltywindow)){
     if(warnings){warning("penaltywindow is infinite. Default penalty used.")}
-    penaltywindow = 4*log(length(x))
+    if (method == "meanvar"){penaltywindow = 4*log(length(x))}
+    if (method == "mean"){penaltywindow = 3*log(length(x))}
   }
   
   if(is.na(penaltyanomaly)){
