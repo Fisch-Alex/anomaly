@@ -69,7 +69,8 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   }
   
   if(is.null(penaltywindow)){
-    penaltywindow = 4*log(length(x))
+    if (method == "meanvar"){penaltywindow = 4*log(length(x))}
+    if (method == "mean"){penaltywindow = 3*log(length(x))}
   }
   
   if(is.null(penaltyanomaly)){
