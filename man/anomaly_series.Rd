@@ -45,6 +45,13 @@ plot(inferred_anomalies)
 summary(inferred_anomalies)
 print(inferred_anomalies)
 
+### Repeat with other method
+
+inferred_anomalies = anomaly_series(x,method="mean")
+plot(inferred_anomalies)
+summary(inferred_anomalies)
+print(inferred_anomalies)
+
 ### Real data example: 
 
 library(anomaly)
