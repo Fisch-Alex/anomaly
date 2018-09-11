@@ -2,8 +2,6 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
    
   ##### We do our error handling here
   
-  # ADD: Error traps for method
-  
   if(!is.logical(warnings)){
     stop("warnings must be a logical.")
   }
@@ -15,6 +13,28 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
 
   tryCatch({x = as.vector(x)}, error = function(e){stop("The data x is not a vector and can not be converted to one.")}, 
              warning = function(w){if(warnings){warning("The data x is not a vector. We managed to convert it but it is probably not a good idea.")}} )
+  
+  if (is.null(method)){
+    stop("Null argument for method.")
+  }
+  
+  if (!is.character(method)){
+    stop("Non character argument for method.")
+  }
+  
+  if (length(method) == 0){
+    stop("Argument for method has length 0.")
+  }
+  
+  if (length(method) > 1){
+    if(warnings){warning("Argument for method has length > 1 and only the first element will be used")}
+    method = method[1]
+  }
+  
+  if (!method %in% c("mean","meanvar")){
+    stop("Argument for method should be either 'mean' or 'meanvar'")
+  }
+  
   
   if (sum(is.na(x)) > 0){
     if(warnings){warning("x contains NAs. We removed them and continued our analysis on the rest.")}
@@ -61,9 +81,18 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
     stop("The length of x must be longer than the minimum segment length")
   }
   
+  if (method == "meanvar"){
   if(2 > minimumsegmentlength){
     if(warnings){warning("minimumsegmentlength must be at least 2. We reverted to default")}
     minimumsegmentlength = 10
+  }
+  }
+  
+  if (method == "mean"){
+    if(1 > minimumsegmentlength){
+      if(warnings){warning("minimumsegmentlength must be at least 1. We reverted to default")}
+      minimumsegmentlength = 10
+    }
   }
   
   if(length(x) <= 100){
