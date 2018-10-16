@@ -155,7 +155,7 @@ void findoptimaloption(int ii, struct orderedobservationlist *list, int minsegle
 	list[ii+1].optimalcostofprevious = optimalscore;
 }
 
-void pruner(struct orderedobservationlist *list, int ii, double penaltychange, int minseglength)
+void pruner(struct orderedobservationlist *list, int ii, double penaltychange, int minseglength, int maxseglength)
 {
 
 	double threshold;
@@ -163,6 +163,15 @@ void pruner(struct orderedobservationlist *list, int ii, double penaltychange, i
 
      	struct orderedobservationlist* current = NULL;
 	current = list[0].next;
+
+	if (maxseglength < ii - current->numberofobservation) 
+	{
+
+		current->previous->next = current->next;
+		current->next->previous = current->previous;
+		current = current->next;
+
+	}
 
 	while (current->numberofobservation < ii - minseglength + 2)
 	{
@@ -188,7 +197,7 @@ void pruner(struct orderedobservationlist *list, int ii, double penaltychange, i
 }
 
 
-int solveorderedobservationlist(struct orderedobservationlist *list, int n, double penaltychange, double penaltyoutlier, int minseglength)
+int solveorderedobservationlist(struct orderedobservationlist *list, int n, double penaltychange, double penaltyoutlier, int minseglength, int maxseglength)
 {
 
 	int ii = 1;
@@ -198,7 +207,7 @@ int solveorderedobservationlist(struct orderedobservationlist *list, int n, doub
 	  
 		updatewithobservation(ii,list,penaltychange);
 		findoptimaloption(ii,list,minseglength,penaltyoutlier);
-		pruner(list,ii,penaltychange,minseglength);
+		pruner(list,ii,penaltychange,minseglength,maxseglength);
 		
 		if (ii % 128 == 0)
 		{

@@ -8,7 +8,7 @@
 
 
 
-SEXP MeanAnomaly(SEXP Rx, SEXP Rn, SEXP Rminlength, SEXP Rbetachange, SEXP Rbetaanomaly)
+SEXP MeanAnomaly(SEXP Rx, SEXP Rn, SEXP Rminlength, SEXP Rmaxlength, SEXP Rbetachange, SEXP Rbetaanomaly)
 {
   
   /* 
@@ -19,15 +19,17 @@ SEXP MeanAnomaly(SEXP Rx, SEXP Rn, SEXP Rminlength, SEXP Rbetachange, SEXP Rbeta
  	PROTECT(Rx) ; 
  	PROTECT(Rn) ;
 	PROTECT(Rminlength) ;
+	PROTECT(Rmaxlength) ;
 	PROTECT(Rbetachange) ;
 	PROTECT(Rbetaanomaly) ;
 	
-  	int n = 0, minlength = 0, error = 0;
+  	int n = 0, minlength = 0, maxlength = 0, error = 0;
   	double betachange = 0.0, betaanomaly = 0.0;
   	double* x = NULL;
 	
   
  	minlength        = *(INTEGER(Rminlength));
+	maxlength        = *(INTEGER(Rmaxlength));
 	n                = *(INTEGER(Rn));
   	x          	 =   REAL(Rx);
   	betachange       = *REAL(Rbetachange);
@@ -38,11 +40,11 @@ SEXP MeanAnomaly(SEXP Rx, SEXP Rn, SEXP Rminlength, SEXP Rbetachange, SEXP Rbeta
 	populateorderedobservationlist_mean(&mylist, x, n); 
 
 	
-	error = solveorderedobservationlist_mean(mylist, n, betachange, betaanomaly, minlength);
+	error = solveorderedobservationlist_mean(mylist, n, betachange, betaanomaly, minlength, maxlength);
 	
 	if (error){
 	  free(mylist);
-	  UNPROTECT(5);
+	  UNPROTECT(6);
 	  return R_NilValue ; 
 	}
 
@@ -68,7 +70,7 @@ SEXP MeanAnomaly(SEXP Rx, SEXP Rn, SEXP Rminlength, SEXP Rbetachange, SEXP Rbeta
 
 	free(mylist); 
 
-  	UNPROTECT(6);
+  	UNPROTECT(7);
   	return(Rout) ; 
 }
 

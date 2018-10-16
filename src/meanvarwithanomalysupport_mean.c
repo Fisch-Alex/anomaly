@@ -137,7 +137,7 @@ void findoptimaloption_mean(int ii, struct orderedobservationlist_mean *list, in
 	list[ii+1].optimalcostofprevious = optimalscore;
 }
 
-void pruner_mean(struct orderedobservationlist_mean *list, int ii, double penaltychange, int minseglength)
+void pruner_mean(struct orderedobservationlist_mean *list, int ii, double penaltychange, int minseglength, int maxseglength)
 {
 
 	double threshold;
@@ -145,6 +145,15 @@ void pruner_mean(struct orderedobservationlist_mean *list, int ii, double penalt
 
      	struct orderedobservationlist_mean* current = NULL;
 	current = list[0].next;
+
+	if (maxseglength < ii - current->numberofobservation) 
+	{
+
+		current->previous->next = current->next;
+		current->next->previous = current->previous;
+		current = current->next;
+
+	}
 
 	while (current->numberofobservation < ii - minseglength + 2)
 	{
@@ -170,7 +179,7 @@ void pruner_mean(struct orderedobservationlist_mean *list, int ii, double penalt
 }
 
 
-int solveorderedobservationlist_mean(struct orderedobservationlist_mean *list, int n, double penaltychange, double penaltyoutlier, int minseglength)
+int solveorderedobservationlist_mean(struct orderedobservationlist_mean *list, int n, double penaltychange, double penaltyoutlier, int minseglength, int maxseglength)
 {
 
 	int ii = 1;
@@ -180,7 +189,7 @@ int solveorderedobservationlist_mean(struct orderedobservationlist_mean *list, i
 	  
 		updatewithobservation_mean(ii,list,penaltychange);
 		findoptimaloption_mean(ii,list,minseglength,penaltyoutlier);
-		pruner_mean(list,ii,penaltychange,minseglength);
+		pruner_mean(list,ii,penaltychange,minseglength,maxseglength);
 		
 		if (ii % 128 == 0)
 		{

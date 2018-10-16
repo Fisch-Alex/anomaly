@@ -28,7 +28,7 @@ void updatewithobservation(int ii, struct orderedobservationlist *list, double p
 
 void findoptimaloption(int ii, struct orderedobservationlist *list, int minseglength, double penaltyoutlier);
 
-int solveorderedobservationlist(struct orderedobservationlist *list, int n, double penaltychange, double penaltyoutlier, int minseglength);
+int solveorderedobservationlist(struct orderedobservationlist *list, int n, double penaltychange, double penaltyoutlier, int minseglength, int maxseglength);
 
 void changepointreturn(struct orderedobservationlist *list, int n, int* numberofchanges, int** changepoints);
 
@@ -56,7 +56,7 @@ void updatewithobservation_mean(int ii, struct orderedobservationlist_mean *list
 
 void findoptimaloption_mean(int ii, struct orderedobservationlist_mean *list, int minseglength, double penaltyoutlier);
 
-int solveorderedobservationlist_mean(struct orderedobservationlist_mean *list, int n, double penaltychange, double penaltyoutlier, int minseglength);
+int solveorderedobservationlist_mean(struct orderedobservationlist_mean *list, int n, double penaltychange, double penaltyoutlier, int minseglength, int maxseglength);
 
 void changepointreturn_mean(struct orderedobservationlist_mean *list, int n, int* numberofchanges, int** changepoints);
 

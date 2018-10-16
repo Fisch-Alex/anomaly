@@ -1,4 +1,4 @@
-anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimumsegmentlength = 10, warnings = TRUE, method = "meanvar"){
+anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimumsegmentlength = 10, maximumsegmentlength = NULL, warnings = TRUE, method = "meanvar"){
    
   ##### We do our error handling here
   
@@ -173,6 +173,47 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
     if(warnings){warning("penaltywindow is less than 0!")}
   }
   
+  
+  ###### TO DO: ADD ERROR TRAPS FOR MAXIMUMSEGMENTLENGTH!!!!!!
+  
+  if(is.null(maximumsegmentlength)){
+    maximumsegmentlength = length(x)
+  } else{
+    
+    defaultreturn_maximumsegmentlength = function(){
+      if(warnings){warning("The input for maximumsegmentlength is not an integer and cannot be converted to an integer. We revert to default.")}
+      return(length(x))
+    }
+    
+    maximumsegmentlength = tryCatch({as.integer(maximumsegmentlength)},
+                                    error   = function(e){defaultreturn_maximumsegmentlength()},
+                                    warning = function(w){defaultreturn_maximumsegmentlength()})
+    
+    if (length(maximumsegmentlength)>1){
+      if(warnings){warning("The input for maximumsegmentlength has multiple entries. Only the first one is kept")}
+      maximumsegmentlength = maximumsegmentlength[1]
+    }
+    
+    if(is.na(maximumsegmentlength)){
+      if(warnings){warning("maximumsegmentlength should be a positive integer. NA supplied. It reverted to the default")}
+      maximumsegmentlength = length(x)
+    }
+    if(is.nan(maximumsegmentlength)){
+      if(warnings){warning("maximumsegmentlength should be a positive integer. NaN supplied. It reverted to the default")}
+      maximumsegmentlength = length(x)
+    }
+    if(is.infinite(maximumsegmentlength)){
+      maximumsegmentlength = length(x)
+    }
+    
+    if (maximumsegmentlength < minimumsegmentlength){
+      stop("The maximumsegmentlength has to be at least the minimumsegmentlength")
+    }
+    
+  }
+  
+  
+  
   ##### Actual code happens below
   
   output        = list()
@@ -186,10 +227,10 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   x = x/mad(x)
   
   if (method == "meanvar"){
-  Canomalyoutput = .Call("MeanVarAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), penaltywindow, penaltyanomaly)
+  Canomalyoutput = .Call("MeanVarAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
   }
   if (method == "mean"){
-    Canomalyoutput = .Call("MeanAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), penaltywindow, penaltyanomaly)
+    Canomalyoutput = .Call("MeanAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
   }  
   
   if(is.null(Canomalyoutput)){

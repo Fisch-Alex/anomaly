@@ -5,7 +5,8 @@
 \title{A technique for detecting anomalous segments based on CAPA (Collective And Point Anomaly) by Fisch et al.}
 \usage{
 anomaly_series(x, penaltywindow = NULL, penaltyanomaly = NULL,
-  minimumsegmentlength = 10, warnings = TRUE, method = "meanvar")
+  minimumsegmentlength = 10, maximumsegmentlength = NULL, warnings = TRUE, 
+  method = "meanvar")
 }
 \arguments{
 \item{x}{A numeric vector containing the data which is to be inspected.}
@@ -15,6 +16,8 @@ anomaly_series(x, penaltywindow = NULL, penaltyanomaly = NULL,
 \item{penaltyanomaly}{A numeric constant indicating the penalty for adding an additional point anomaly. It defaults to a BIC style penalty if no argument is provided.}
 
 \item{minimumsegmentlength}{An integer indicating the minimum length of epidemic changes. It must be at least 2 and defaults to 10.}
+
+\item{maximumsegmentlength}{An integer indicating the maximum length of epidemic changes. It must be at least the minimumsegmentlength and defaults to infinity}
 
 \item{warnings}{A logical determining whether the warnings should be displayed. It defaults to TRUE.}
 
