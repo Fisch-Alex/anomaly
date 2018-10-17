@@ -6,10 +6,12 @@
 
 extern SEXP MeanVarAnomaly(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP MeanAnomaly(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP PoissonAnomaly(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"MeanVarAnomaly", (DL_FUNC) &MeanVarAnomaly, 6},
     {"MeanAnomaly", (DL_FUNC) &MeanAnomaly, 6},
+    {"PoissonAnomaly", (DL_FUNC) &PoissonAnomaly, 6},
     {NULL, NULL, 0}
 };
 

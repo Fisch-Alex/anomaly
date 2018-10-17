@@ -32,6 +32,8 @@ int solveorderedobservationlist(struct orderedobservationlist *list, int n, doub
 
 void changepointreturn(struct orderedobservationlist *list, int n, int* numberofchanges, int** changepoints);
 
+void pruner(struct orderedobservationlist *list, int ii, double penaltychange, int minseglength, int maxseglength);
+
 typedef struct orderedobservationlist_mean 
 {
 	int    numberofobservation;
@@ -59,5 +61,13 @@ void findoptimaloption_mean(int ii, struct orderedobservationlist_mean *list, in
 int solveorderedobservationlist_mean(struct orderedobservationlist_mean *list, int n, double penaltychange, double penaltyoutlier, int minseglength, int maxseglength);
 
 void changepointreturn_mean(struct orderedobservationlist_mean *list, int n, int* numberofchanges, int** changepoints);
+
+void pruner_mean(struct orderedobservationlist_mean *list, int ii, double penaltychange, int minseglength, int maxseglength);
+
+int solveorderedobservationlist_poisson(struct orderedobservationlist_mean *list, int n, double penaltychange, double penaltyoutlier, int minseglength, int maxseglength);
+
+void updatewithobservation_poisson(int ii, struct orderedobservationlist_mean *list, double penaltychange);
+
+void findoptimaloption_poisson(int ii, struct orderedobservationlist_mean *list, int minseglength, double penaltyoutlier);
 
 

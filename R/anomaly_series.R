@@ -31,8 +31,8 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
     method = method[1]
   }
   
-  if (!method %in% c("mean","meanvar")){
-    stop("Argument for method should be either 'mean' or 'meanvar'")
+  if (!method %in% c("mean","poisson","meanvar")){
+    stop("Argument for method should be either 'mean', 'poisson' or 'meanvar'")
   }
   
   
@@ -51,8 +51,16 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
     x = x[which(!is.infinite(x))]
   }
   
-  if(mad(x) == 0){
-    stop("x has robust variance 0. We can not run our algorithm on such data")
+  if (method %in% c("mean","meanvar")){
+    if(mad(x) == 0){
+      stop("x has robust variance 0. We can not run our algorithm on such data")
+    }
+  }
+  
+  if (method %in% c("poisson")){
+    if(sum(x<0)>0){
+      stop("x contains negative values and poisson data was assumed. Poisson random numbers are non-negative.")
+    }
   }
   
   defaultreturn_minimumsegmentlength = function(){
@@ -88,7 +96,7 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   }
   }
   
-  if (method == "mean"){
+  if (method %in% c("mean","poisson")){
     if(1 > minimumsegmentlength){
       if(warnings){warning("minimumsegmentlength must be at least 1. We reverted to default")}
       minimumsegmentlength = 10
@@ -101,7 +109,7 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   
   if(is.null(penaltywindow)){
     if (method == "meanvar"){penaltywindow = 4*log(length(x))}
-    if (method == "mean"){penaltywindow = 3*log(length(x))}
+    if (method %in% c("mean","poisson")){penaltywindow = 3*log(length(x))}
   }
   
   if(is.null(penaltyanomaly)){
@@ -111,7 +119,7 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   Defaultwindowpenalty = function(){
     if(warnings){warning("Non-numeric argument for penaltywindow. Default penalty used.")}
     if (method == "meanvar"){penaltywindow = 4*log(length(x))}
-    if (method == "mean"){penaltywindow = 3*log(length(x))}
+    if (method %in% c("mean","poisson")){penaltywindow = 3*log(length(x))}
   }
   
   Defaultanomalypenalty = function(){
@@ -125,19 +133,19 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   if(is.na(penaltywindow)){
     if(warnings){warning("penaltywindow is NA. Default penalty used.")}
     if (method == "meanvar"){penaltywindow = 4*log(length(x))}
-    if (method == "mean"){penaltywindow = 3*log(length(x))}
+    if (method %in% c("mean","poisson")){penaltywindow = 3*log(length(x))}
   }
   
   if(is.nan(penaltywindow)){
     if(warnings){warning("penaltywindow is NaN. Default penalty used.")}
     if (method == "meanvar"){penaltywindow = 4*log(length(x))}
-    if (method == "mean"){penaltywindow = 3*log(length(x))}
+    if (method %in% c("mean","poisson")){penaltywindow = 3*log(length(x))}
   }
   
   if(is.infinite(penaltywindow)){
     if(warnings){warning("penaltywindow is infinite. Default penalty used.")}
     if (method == "meanvar"){penaltywindow = 4*log(length(x))}
-    if (method == "mean"){penaltywindow = 3*log(length(x))}
+    if (method %in% c("mean","poisson")){penaltywindow = 3*log(length(x))}
   }
   
   if(is.na(penaltyanomaly)){
@@ -172,9 +180,6 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   if((penaltywindow)<=0){
     if(warnings){warning("penaltywindow is less than 0!")}
   }
-  
-  
-  ###### TO DO: ADD ERROR TRAPS FOR MAXIMUMSEGMENTLENGTH!!!!!!
   
   if(is.null(maximumsegmentlength)){
     maximumsegmentlength = length(x)
@@ -212,8 +217,6 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
     
   }
   
-  
-  
   ##### Actual code happens below
   
   output        = list()
@@ -221,10 +224,20 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   
   output[["anomalies_strength"]]      = data.frame(variance_change = numeric(0), mean_change = numeric(0))
   output[["pointanomalies_strength"]] = numeric(0)
-
-  n = length(x)
-  x = x - median(x)
-  x = x/mad(x)
+  
+  if(method %in% c("mean","meanvar")){
+    n = length(x)
+    x = x - median(x)
+    x = x/mad(x)
+  }
+  
+  if(method %in% c("poisson")){
+    n = length(x)
+    mean_est = mean(x,trim=0.05)
+    x = x/mean_est
+    penaltywindow = penaltywindow/sqrt(mean_est)
+    penaltywindow = penaltywindow/sqrt(mean_est)
+  }
   
   if (method == "meanvar"){
   Canomalyoutput = .Call("MeanVarAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
@@ -232,6 +245,9 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   if (method == "mean"){
     Canomalyoutput = .Call("MeanAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
   }  
+  if (method == "poisson"){
+    Canomalyoutput = .Call("PoissonAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
+  } 
   
   if(is.null(Canomalyoutput)){
     warning("User interrupt. NULL is returned.")
@@ -271,16 +287,20 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
       meanchanges     = rep(NA,length(which(Canomalyoutput$start < Canomalyoutput$end)))
       variancechanges = rep(NA,length(which(Canomalyoutput$start < Canomalyoutput$end)))  
       
-      for (ii in 1:length(which(Canomalyoutput$start < Canomalyoutput$end)) ){
+      if(method %in% c("mean","meanvar")){
+      
+        for (ii in 1:length(which(Canomalyoutput$start < Canomalyoutput$end)) ){
         
-          observation = which(Canomalyoutput$start < Canomalyoutput$end)[ii]
+            observation = which(Canomalyoutput$start < Canomalyoutput$end)[ii]
           
-          variance = var(x[Canomalyoutput$start[observation]:Canomalyoutput$end[observation]])
+            variance = var(x[Canomalyoutput$start[observation]:Canomalyoutput$end[observation]])
           
-          variancechanges[ii] = sqrt(variance) + 1/sqrt(variance) - 2
+            variancechanges[ii] = sqrt(variance) + 1/sqrt(variance) - 2
           
-          meanchanges[ii]     = mean(x[Canomalyoutput$start[observation]:Canomalyoutput$end[observation]])^2/sqrt(variance)
+            meanchanges[ii]     = mean(x[Canomalyoutput$start[observation]:Canomalyoutput$end[observation]])^2/sqrt(variance)
           
+        }
+        
       }
         
       output[["anomalies_strength"]] = data.frame(variance_change = variancechanges, mean_change = meanchanges)

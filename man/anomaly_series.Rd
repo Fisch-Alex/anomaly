@@ -21,7 +21,7 @@ anomaly_series(x, penaltywindow = NULL, penaltyanomaly = NULL,
 
 \item{warnings}{A logical determining whether the warnings should be displayed. It defaults to TRUE.}
 
-\item{method}{A string indicating which type of deviations from the baseline are considered. Can be "meanvar" for collective anomalies caracterised by joint changes in mean and variance (the default) and "mean" for collective anomalies characterised by changes in mean only.}
+\item{method}{A string indicating which type of deviations from the baseline are considered. Can be "meanvar" for collective anomalies caracterised by joint changes in mean and variance (the default), "mean" for collective anomalies characterised by changes in mean only, and "poisson" if the collective anomalies are characterised by an a-typical poisson parameter.}
 }
 \value{
 An anomaly_series object.
