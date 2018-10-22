@@ -164,7 +164,7 @@ void pruner(struct orderedobservationlist *list, int ii, double penaltychange, i
      	struct orderedobservationlist* current = NULL;
 	current = list[0].next;
 
-	if (maxseglength < ii - current->numberofobservation) 
+	if (maxseglength < ii - current->numberofobservation + 2) 
 	{
 
 		current->previous->next = current->next;

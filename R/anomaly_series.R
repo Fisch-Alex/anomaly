@@ -240,13 +240,13 @@ anomaly_series = function(x, penaltywindow = NULL, penaltyanomaly = NULL, minimu
   }
   
   if (method == "meanvar"){
-  Canomalyoutput = .Call("MeanVarAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
+    Canomalyoutput = .Call("MeanVarAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly, as.integer(0))
   }
   if (method == "mean"){
-    Canomalyoutput = .Call("MeanAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
+    Canomalyoutput = .Call("MeanAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly, as.integer(0))
   }  
   if (method == "poisson"){
-    Canomalyoutput = .Call("PoissonAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly)
+    Canomalyoutput = .Call("PoissonAnomaly", PACKAGE = "anomaly", x, as.integer(n), as.integer(minimumsegmentlength), as.integer(maximumsegmentlength), penaltywindow, penaltyanomaly, as.integer(0))
   } 
   
   if(is.null(Canomalyoutput)){
